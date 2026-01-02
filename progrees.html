@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Habit Tracker</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #a8e6cf, #dcedc1);
+        margin: 0;
+        padding: 20px;
+        text-align: center;
+    }
+
+    h1 {
+        color: #2c6e49;
+    }
+
+    .activity-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: white;
+        margin: 10px auto;
+        padding: 15px 20px;
+        border-radius: 12px;
+        width: 300px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        font-size: 18px;
+    }
+
+    .activity-card input[type="checkbox"] {
+        transform: scale(1.5);
+        cursor: pointer;
+    }
+
+    #progressContainer {
+        width: 300px;
+        margin: 20px auto;
+        background: #ddd;
+        border-radius: 20px;
+        overflow: hidden;
+        height: 25px;
+    }
+
+    #progressBar {
+        height: 100%;
+        width: 0%;
+        background: #4CAF50;
+        border-radius: 20px;
+        transition: width 0.5s;
+    }
+
+    #progressText {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #2c6e49;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: none;
+        margin: 10px;
+        cursor: pointer;
+        background: #2c6e49;
+        color: white;
+    }
+
+    button:hover {
+        background: #1b4d33;
+    }
+</style>
+</head>
+<body>
+
+<h1>🏆 Daily Habit Tracker</h1>
+
+<div class="activity-card">
+    <span>💧 Drink 2L Water</span>
+    <input type="checkbox" id="water">
+</div>
+
+<div class="activity-card">
+    <span>🧘 Meditation 15 min</span>
+    <input type="checkbox" id="meditation">
+</div>
+
+<div class="activity-card">
+    <span>🏋️ Exercise</span>
+    <input type="checkbox" id="exercise">
+</div>
+
+<div class="activity-card">
+    <span>🚶 Evening Walk</span>
+    <input type="checkbox" id="walk">
+</div>
+
+<div id="progressContainer">
+    <div id="progressBar"></div>
+</div>
+
+<div id="progressText">You completed 0% of your activities.</div>
+
+<button onclick="resetActivities()">Reset</button>
+
+<script>
+const activities = ["water", "meditation", "exercise", "walk"];
+
+function updateProgress() {
+    let completed = 0;
+
+    activities.forEach(id => {
+        if(document.getElementById(id).checked) completed++;
+    });
+
+    const percent = Math.round((completed / activities.length) * 100);
+
+    document.getElementById("progressBar").style.width = percent + "%";
+    document.getElementById("progressText").innerHTML = 
+        `You completed ${completed} of ${activities.length} activities (${percent}%) ✅`;
+}
+
+activities.forEach(id => {
+    document.getElementById(id).addEventListener('change', updateProgress);
+});
+
+function resetActivities() {
+    activities.forEach(id => {
+        document.getElementById(id).checked = false;
+    });
+    updateProgress(); 
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>thoughts</title>
+        <style>
+            body{
+                background:linear-gradient(to left,#00c6ff,#fed47b);
+                padding:30px;
+            }
+            .a{
+                background: linear-gradient(to bottom, #fddb92,#d1fdff);
+                color:#1b5e20;
+                max-width:600px;
+                margin:auto;
+                padding:30px;
+                border-radius:15px;
+                box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+                text-align:center;
+            }
+            .a h2{
+                margin-bottom: 20px;
+                font-size:28px;
+            }
+            .a p{
+                font-size:25px;
+                font-style:italic;
+            
+            }
+        </style>
+    </head>
+    <body>
+        <div class="a"> 
+            <h2>🌟 Today's Quote</h2>
+            <p id="quote"></p>
+            <audio id="reminderSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
+        </div>
+        <script>
+            const quotes=[
+                "Day 0: Every day is a chance for new beginning.",
+                "Day 1:  Every small step you take builds your future.",
+                "Day 2: You don't need to be perfect; you just need to start.",
+                "Day 3: Consistency beats talent when talent doesn't work hard.",
+                "Day 4: Focus on progress, not perfection",
+                "Day 5: You are stronger than the challenges you face.",
+                "Day 6: The best project you'll ever work on is yourself. ",
+                "Day 7: Believe in your abilites--your future self will thank you.",
+                "Day 8: Failure is not the end;it's a lesson.",
+                "Day 9: Push  yourself because no one else will do it for you.",
+                "Day 10: Your dreams are valid--start chasing them.",
+                "Day 11: Don't compare your journey with others.",
+                "Day 12: What seems impossible today will become your strength tomorrow.",
+                "Day 13: A positive mind finds opportunity in everything.",
+                "Day 14: Don't quit.Sometimes the last key opens the lock.",
+                "Day 15: You grow through what you go through.",
+                "Day 16: Trust the process, even when it feels slow.",
+                "Day 17: Be the energy you want to attract.",
+                "Day 18: Tough times build tough people.",
+                "Day 19: Success starts with self-discipline.",
+                "Day 20: One hour of focus can change your entire day.",
+                "Day 21: The harder you work, the luckier you get.",
+                "Day 22: You don't have to see the whole staircase, just take the first step.",
+                "Day 23: Every day is a new chance to become better.",
+                "Day 24: If you want something you never had, do something you never did.",
+                "Day 25: Self-belief is your superpower.",
+                "Day 26: Small habits create big changes.",
+                "Day 27: Control your mind before it controls you.",
+                "Day 28: Rest when needed, but never give up.",
+                "Day 29: Challenges are signs that you're growing.",
+                "Day 30: Your mindset decided your future."
+            ];
+             const now=new Date();
+             const currentHour=now.getHours();
+             let quoteDate=new Date(now);
+             if(currentHour<7)
+             {
+                quoteDate.setDate(now.getDate-1);
+             }
+             const index=quoteDate.getDate()% quotes.length;
+             document.getElementById("quote").textContent=quotes[index];
+             setInterval(()=>{
+                const current=new Date();
+                if(current.getHours()===7&&current.getMinutes===0&&current.getSeconds()<=10){
+                    document.getElementById("reminderSound").play();
+                    alert("🤗 It's 7 AM! Here's your daily quote:\n\n"+quotes[index]);
+                }
+             },1000);
+        </script>
+    </body>
+</html>

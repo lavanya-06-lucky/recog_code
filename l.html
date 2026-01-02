@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Page</title>
+  <style>
+    .login{
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(to right, skyblue, pink);
+      padding: 35px;
+      margin: 100px auto;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .login input{
+      width:100%;
+      padding:10px;
+      margin:10px 0;
+    }
+    .login button{
+      width:30%;
+      padding:8px;
+
+      border-radius: 10%;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="login">
+  <h1>Login Page</h1>
+
+  <form onsubmit="return validateForm()">
+
+    <input type="text" id="name" placeholder="Enter your name...">
+    <div id="nameError" class="error"></div>
+
+    <input type="text" id="phone" placeholder="example: xxxxxx0001">
+    <div id="phoneError" class="error"></div>
+
+    <input type="email" id="email" placeholder="example: you@gmail.com">
+    <div id="emailError" class="error"></div>
+
+    <input type="text" id="city" placeholder="Enter your City...">
+    <div id="cityError" class="error"></div>
+
+    <button type="submit">Login</button>
+
+  </form>
+</div>
+
+<script>
+function validateForm() {
+  let valid = true;
+
+  let name = document.getElementById("name").value.trim();
+  let phone = document.getElementById("phone").value.trim();
+  let email = document.getElementById("email").value.trim();
+  let city = document.getElementById("city").value.trim();
+
+  document.getElementById("nameError").innerHTML = "";
+  document.getElementById("phoneError").innerHTML = "";
+  document.getElementById("emailError").innerHTML = "";
+  document.getElementById("cityError").innerHTML = "";
+
+  let phonePattern = /^[0-9]{10}$/;
+  let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/i;
+
+  if (name === "") {
+    document.getElementById("nameError").innerHTML = "Name is required";
+    valid = false;
+  }
+
+  if (!phonePattern.test(phone)) {
+    document.getElementById("phoneError").innerHTML =
+      "Enter valid 10-digit phone number";
+    valid = false;
+  }
+
+  if (!emailPattern.test(email)) {
+    document.getElementById("emailError").innerHTML =
+      "Enter valid email address";
+    valid = false;
+  }
+
+  if (city === "") {
+    document.getElementById("cityError").innerHTML = "City is required";
+    valid = false;
+  }
+
+  if (valid) {
+    window.location.href = "health.html"; // redirect after validation
+  }
+
+  return false; // stop default submit
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+

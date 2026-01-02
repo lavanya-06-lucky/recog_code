@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food and Exercise</title>
+    <style>
+        body {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #a8e6cf, #dcedc1);
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #exerciseName {
+            font-size: 2em;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        #exerciseDesc {
+            font-size: 1.2em;
+            margin-top: 5px;
+            color: #444;
+        }
+
+        #timer {
+            font-size: 3em;
+            color: #d9534f;
+            margin-top: 10px;
+        }
+
+        #exerciseImg {
+           width: 260px;
+           margin: 20px auto; 
+           display: none;
+           border-radius: 10px;
+           box-shadow: 0 0 10px #999;
+           display: block; 
+        }
+
+        select, button {
+            padding: 10px;
+            font-size: 1em;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: none;
+            background: #2d79dc;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+       
+        .spotify-box {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+        }
+        .a{
+            text-align: center;
+        }
+        .spotify-box iframe {
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🏋🏽 Select Your Workout</h1>
+
+    <select id="workoutSelect">
+        <option value="">-- Select Workout --</option>
+        <option value="body">Body Exercises</option>
+        <option value="Legs">Leg Workout</option>
+        <option value="upper">Upper Body Workout</option>
+        <option value="flexibility">Flexibility / Stretching</option>
+    </select>
+
+    <br>
+    <button onclick="startSelectedWorkout()">Start Workout</button>
+
+    <div id="exerciseName"></div>
+    <div id="exerciseDesc"></div>
+    <img id="exerciseImg" src="">
+    
+    <div id="timer">00:00</div>
+
+    
+    <div class="spotify-box">
+        <iframe 
+            src="https://open.spotify.com/embed/playlist/37i9dQZF1DX70RN3TfWWJh"
+            width="320" height="380" 
+            frameborder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+        </iframe>
+    </div>
+
+<script>
+const workouts = {
+    body: [
+        {name: "Jumping Jacks", duration: 60, desc: "Jump while spreading your legs.", img:"data:image/webp;base64,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"},
+        {name:"Push-ups", duration:60, desc:"Lower chest to ground, then push.", img:"https://th.bing.com/th/id/OIP.64M3GYAd532V1p1g38T2mQHaGu?w=199&h=181&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Squats", duration:60, desc:"Lower hips like sitting.", img:"https://th.bing.com/th/id/OIP.bZRR_r0KIfV7vWf9neYnyQHaE8?w=240&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Plank", duration:60, desc:"Hold body straight.", img:"https://th.bing.com/th/id/OIP.dKn8v_x8t9COFH3jwB-qKQHaE9?w=239&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Mountain Climbers", duration:60, desc:"Drive knees to chest fast.", img:"https://th.bing.com/th/id/OIP.gmVfOhEPBUu4ePrkd6L6DwHaE8?w=270&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"High Knees", duration:60, desc:"Run lifting knees high.", img:"https://th.bing.com/th/id/OIP.fD4EUcyULmk9kzNwHonPvwHaHa?w=180&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"}
+    ],
+
+    Legs: [
+        {name:"Squats", duration:60, desc:"Lower hips down.", img:"https://th.bing.com/th/id/OIP.bZRR_r0KIfV7vWf9neYnyQHaE8?w=240&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Jump Squats", duration:60, desc:"Explosive jump from squat.", img:"https://th.bing.com/th/id/OIP.oeM4bSakTD0WbrrxN9u6nwHaHO?w=200&h=194&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Donkey Kicks", duration:60, desc:"Kick leg upward.", img:"https://th.bing.com/th/id/OIP.fjK8xqnZi3Y_YJ1m7_wrKQHaHY?w=168&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Side Leg Raise", duration:60, desc:"Lift leg sideways.", img:"https://th.bing.com/th/id/OIP.BB69clPOMXpKHsNLb0qMmgHaHa?w=192&h=192&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"}
+    ],
+
+    upper: [
+        {name:"Push-ups", duration:60, desc:"Lower chest to ground.", img:"https://th.bing.com/th/id/OIP.64M3GYAd532V1p1g38T2mQHaGu?w=199&h=181&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Plank Shoulder Taps", duration:60, desc:"Tap shoulders in plank.", img:"https://th.bing.com/th/id/OIP.fh9pFGtRomktoGjkrTJ__wHaGB?w=210&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Wall Push-ups", duration:60, desc:"Push against wall.", img:"https://th.bing.com/th/id/OIP.OT6reb5bNAiLXeTa3W6hWgHaGO?w=202&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Plank to Push-up", duration:60, desc:"Move from plank to push-up.", img:"https://th.bing.com/th/id/OIP.64M3GYAd532V1p1g38T2mQHaGu?w=164&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Incline Push-ups", duration:60, desc:"Push on a raised surface.", img:"https://th.bing.com/th/id/OIP.nidbduRgP7IFK5cds49WuAAAAA?w=132&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"}
+    ],
+
+    flexibility: [
+        {name:"Neck Rolls", duration:60, desc:"Roll head slowly.", img:"https://th.bing.com/th/id/OIP.y4E4EJuxuY0eix0IJ9oLhwHaDH?w=318&h=146&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Side Bends", duration:60, desc:"Bend sideways.", img:"https://th.bing.com/th/id/OIP.VmRExRTS3_MjYFkARqJshgHaE8?w=254&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Shoulder Rolls", duration:60, desc:"Roll shoulders.", img:"https://th.bing.com/th/id/OIP.9sw3VweSV4lhBJC7jhtZWQHaD4?w=295&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        {name:"Forward Fold", duration:60, desc:"Stretch hamstrings.", img:"https://th.bing.com/th/id/OIP.aU0McVm9aJpd2UQFHPyq-AHaE7?w=255&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"},
+        
+    ]
+};
+const quotes=[
+    "Push yourself, because no one else will do it for you.",
+    "The body achieves what the mind believes.",
+    "Sweat is fat crying. Keep going!",
+    "Don't limit your challenges, challenge your limits.",
+    "Stronger every day.",
+    "Pain is temporary, pride is forever.",
+    "You are one workout away from a good mood.",
+    "Excuses don't burn calories."
+];
+
+let currentSet = [];
+let currentExercise = 0;
+let isBreak = false;
+let timerInterval;
+
+function getRandomQuote() {
+    return quotes[Math.floor(Math.random()*quotes.length)];
+}
+
+function startSelectedWorkout() {
+    const selected = document.getElementById("workoutSelect").value;
+
+    if (!selected) {
+        alert("Please select a workout type!");
+        return;
+    }
+
+    currentSet = workouts[selected];
+    currentExercise = 0;
+    isBreak = false;
+
+    startWorkout();
+}
+
+function startWorkout() {
+    if (currentExercise >= currentSet.length) {
+        document.getElementById("exerciseName").textContent = "🎉 Workout Completed!";
+        document.getElementById("exerciseDesc").textContent = "";
+        document.getElementById("exerciseImg").style.display = "none";
+        document.getElementById("quote").textContent="Great job today!!!🌟🌟";
+        updateTimerDisplay(0);
+        return;
+    }
+
+    const exercise = currentSet[currentExercise];
+    const time = isBreak ? 30 : exercise.duration;
+
+    document.getElementById("exerciseName").textContent = isBreak ? "Break" : exercise.name;
+    document.getElementById("exerciseDesc").textContent = isBreak ? "Relax and breathe..." : exercise.desc;
+
+    const imgBox = document.getElementById("exerciseImg");
+    if (isBreak) {
+        imgBox.style.display = "none";
+    } else {
+        imgBox.style.display = "block";
+        imgBox.src = exercise.img;
+    }
+
+    let timeLeft = time;
+    updateTimerDisplay(timeLeft);
+
+    clearInterval(timerInterval);
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay(timeLeft);
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+
+            if (isBreak) {
+                currentExercise++;
+                isBreak = false;
+            } else {
+                isBreak = true;
+            }
+
+            startWorkout();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    document.getElementById("timer").textContent =
+        (mins < 10 ? "0" + mins : mins) + ":" +
+        (secs < 10 ? "0" + secs : secs);
+}
+</script>
+
+</body>
+</html>

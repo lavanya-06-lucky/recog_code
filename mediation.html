@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meditation Reminder</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #a8edea, #fed6e3);
+        text-align: center;
+        padding: 50px;
+    }
+    h1 {
+        color: #333;
+    }
+    .container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        display: inline-block;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+        padding: 10px;
+        margin: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    button {
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    #message {
+        margin-top: 20px;
+        font-size: 18px;
+        color: #444;
+    }
+</style>
+</head>
+<body>
+
+<h1>🧘 Meditation Reminder</h1>
+<div class="container">
+    <label for="reminderTime">Set Reminder Time:</label><br>
+    <input type="time" id="reminderTime">
+    <br>
+    <button onclick="setReminder()">Set Reminder</button>
+    <div id="message"></div>
+</div>
+
+<audio id="bellSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
+
+<audio id="drinkSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
+
+<script>
+let reminderTimer;
+
+function setReminder() {
+    clearInterval(reminderTimer);
+    const timeInput = document.getElementById('reminderTime').value;
+    const messageDiv = document.getElementById('message');
+
+    if (!timeInput) {
+        messageDiv.textContent = "Please select a valid time.";
+        return;
+    }
+
+    messageDiv.textContent = `Reminder set for ${timeInput}. Keep calm until then.`;
+
+    reminderTimer = setInterval(() => {
+        const now = new Date();
+        const currentTime = now.toTimeString().slice(0,5);
+
+        if (currentTime === timeInput) {
+            clearInterval(reminderTimer);
+            document.getElementById('bellSound').play();
+            messageDiv.textContent = "😇 Time to meditate. Take a deep breath.";
+            alert("Time to meditate 🧘");
+            setTimeout(()=>{
+                document.getElementById('drinkSound').play();
+                messageDiv.textContent="Meditation done! Now drink your energy drink...";
+                alert("Reminder: Drink your energy drink!");
+            },60000);
+        }
+    }, 1000);
+}
+</script>
+
+</body>
+</html>
+
